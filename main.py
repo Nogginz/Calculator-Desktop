@@ -36,13 +36,13 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         if self.operand != "none":
             second_num = float(''.join(self.second_num))
         if self.operand == '+':
-            self.lcdNumber.display(str(first_num + second_num))
+            self.lcdNumber.display(str(round(first_num + second_num, 8)))
         elif self.operand == '-':
-            self.lcdNumber.display(str(first_num - second_num))
+            self.lcdNumber.display(str(round(first_num - second_num, 8)))
         elif self.operand == '*':
-            self.lcdNumber.display(str(first_num * second_num))
+            self.lcdNumber.display(str(round(first_num * second_num, 8)))
         elif self.operand == '/':
-            self.lcdNumber.display(str(first_num / second_num))
+            self.lcdNumber.display(str(round(first_num / second_num, 8)))
         elif self.operand == "none":
             self.lcdNumber.display(str(first_num))
 
@@ -59,13 +59,23 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.lcdNumber.display(0)
 
     def read_num(self, num):
-
-        if self.operation_select:
-            self.second_num.append(str(num))
-            self.lcdNumber.display(''.join(self.second_num))
+        if ((len(self.first_num) == 0) or (self.operation_select and len(self.second_num) == 0)) and num == 0:
+            self.lcdNumber.display('0')
         else:
-            self.first_num.append(str(num))
-            self.lcdNumber.display(''.join(self.first_num))
+            if self.operation_select:
+                if num == '.' and self.second_num.count('.') == 1:
+                    self.lcdNumber.display(''.join(self.second_num))
+                else:
+                    self.second_num.append(str(num))
+                    self.lcdNumber.display(''.join(self.second_num))
+            else:
+                if num == '.' and self.first_num.count('.') == 1:
+                    self.lcdNumber.display(''.join(self.first_num))
+                else:
+                    self.first_num.append(str(num))
+                    self.lcdNumber.display(''.join(self.first_num))
+        print(self.first_num)
+        print(self.second_num)
 
 
 def main():
